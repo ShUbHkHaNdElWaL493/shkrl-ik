@@ -1,0 +1,9 @@
+# Request
+string source_frame
+string target_frame
+string[] joint_names
+float64[] joints
+---
+# Response
+bool success
+float64[6] tcp

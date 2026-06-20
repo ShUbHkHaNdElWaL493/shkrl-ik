@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(control)
+project(skrl_description)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -7,16 +7,24 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(control_msgs REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(rclcpp_action REQUIRED)
+find_package(skrl_msgs REQUIRED)
+find_package(tf2_ros REQUIRED)
+
+# add_executable(commander src/commander.cpp)
+# ament_target_dependencies(commander control_msgs rclcpp rclcpp_action skrl_msgs tf2_ros)
 
 install(
-  DIRECTORY launch models
+  DIRECTORY config launch models rviz
   DESTINATION share/${PROJECT_NAME}
 )
 
-install(
-  PROGRAMS scripts/definitions.py scripts/control.py scripts/train.py
-  DESTINATION lib/${PROJECT_NAME}
-)
+# install(
+#   TARGETS commander
+#   DESTINATION lib/${PROJECT_NAME}
+# )
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
