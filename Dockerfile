@@ -13,6 +13,8 @@ RUN apt-get update && apt-get install -y \
     libeigen3-dev \
     ros-humble-ur \
     ros-humble-ur-* \
+    unzip \
+    wget \
     && rm -rf /var/lib/apt/lists/*
 
 RUN add-apt-repository ppa:sdurobotics/ur-rtde -y \
@@ -20,6 +22,11 @@ RUN add-apt-repository ppa:sdurobotics/ur-rtde -y \
     librtde \
     librtde-dev \
     && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /opt
+RUN wget https://download.pytorch.org/libtorch/cu132/libtorch-shared-with-deps-2.12.1%2Bcu132.zip \
+    && unzip -q libtorch.zip \
+    && rm libtorch.zip
 
 WORKDIR /skrl
 COPY ./src ./src
