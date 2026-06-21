@@ -13,18 +13,18 @@ find_package(rclcpp_action REQUIRED)
 find_package(skrl_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
 
-# add_executable(commander src/commander.cpp)
-# ament_target_dependencies(commander control_msgs rclcpp rclcpp_action skrl_msgs tf2_ros)
+add_executable(commander src/commander.cpp)
+ament_target_dependencies(commander control_msgs rclcpp rclcpp_action skrl_msgs tf2_ros)
 
 install(
   DIRECTORY config launch models rviz
   DESTINATION share/${PROJECT_NAME}
 )
 
-# install(
-#   TARGETS commander
-#   DESTINATION lib/${PROJECT_NAME}
-# )
+install(
+  TARGETS commander
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

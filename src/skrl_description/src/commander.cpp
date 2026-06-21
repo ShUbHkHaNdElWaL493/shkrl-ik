@@ -25,7 +25,6 @@ class CommanderNode : public rclcpp::Node
     {
 
         response->success = false;
-        response->tcp.resize(6);
         response->tcp[0] = 0.0;
         response->tcp[1] = 0.0;
         response->tcp[2] = 0.0;
@@ -76,7 +75,7 @@ class CommanderNode : public rclcpp::Node
                 request->target_frame,
                 request->source_frame,
                 tf2::TimePointZero,
-                std::chrono::nanoseconds(dt * 1e9)
+                std::chrono::nanoseconds(static_cast<size_t>(dt * 1e9))
             );
             response->success = true;
             response->tcp[0] = t.transform.translation.x;
@@ -96,7 +95,6 @@ class CommanderNode : public rclcpp::Node
 
     CommanderNode() :
     Node("commander_node", rclcpp::NodeOptions().automatically_declare_parameters_from_overrides(true)),
-    joints_client(rclcpp_action::create_client<control_msgs::action::FollowJointTrajectory>(this, "joint_trajectory_controller/follow_joint_trajectory")),
     tf_buffer(std::make_unique<tf2_ros::Buffer>(this->get_clock())),
     tf_listener(std::make_shared<tf2_ros::TransformListener>(*tf_buffer))
     {
@@ -104,10 +102,14 @@ class CommanderNode : public rclcpp::Node
         this->get_parameter("frequency", dt);
         dt = 1.0 / dt;
 
+        std::string joint_controller;
+        this->get_parameter("joint_controller", joint_controller);
+        this->joints_client = rclcpp_action::create_client<control_msgs::action::FollowJointTrajectory>(this, joint_controller + "/follow_joint_trajectory");
+
         this->get_tcp_service = this->create_service<skrl_msgs::srv::GetTCP>(
             "/get_tcp",
             std::bind(&CommanderNode::get_tcp_callback, this, std::placeholders::_1, std::placeholders::_2)
-        )
+        );
 
         RCLCPP_INFO(this->get_logger(), "Waiting for JTC action server...");
         this->joints_client->wait_for_action_server();
@@ -119,7 +121,7 @@ class CommanderNode : public rclcpp::Node
 int main(int argc, char **argv)
 {
     rclcpp::init(argc, argv);
-    rclcpp::spin(std::make_shared<CommanderNode>(100));
+    rclcpp::spin(std::make_shared<CommanderNode>());
     rclcpp::shutdown();
     return 0;
 }

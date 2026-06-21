@@ -28,6 +28,8 @@ services:
     environment:
       - ROBOT_MODEL=${UR_MODEL}
   skrl:
+    build:
+      context: .
     image: skrl
     container_name: skrl
     networks:

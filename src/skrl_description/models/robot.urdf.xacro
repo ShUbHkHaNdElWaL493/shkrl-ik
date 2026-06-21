@@ -4,15 +4,9 @@
   <xacro:include filename="$(find ur_description)/urdf/ur_macro.xacro"/>
 
   <!-- parameters -->
-
-  <!-- possible 'mode' values: gz, hw -->
-  <xacro:arg name="mode" default=""/>
-  <xacro:property name="mode" value="$(arg mode)"/>
-
   <!-- possible 'ur_type' values: ur3, ur5, ur10, ur3e, ur5e, ur7e, ur10e, ur12e, ur16e, ur8long, ur15, ur18, ur20, ur30 -->
   <xacro:arg name="ur_type" default="urX"/>
   <xacro:arg name="robot_ip" default="0.0.0.0"/>
-  <xacro:arg name="controllers" default=""/>
   
   <link name="world"/>
 
@@ -31,7 +25,7 @@
       use_fake_hardware="false"
       fake_sensor_commands="false"
       sim_gazebo="false"
-      sim_ignition="${mode == 'gz'}"
+      sim_ignition="false"
       headless_mode="true"
       initial_positions="${dict(shoulder_pan_joint=0.0,shoulder_lift_joint=-1.57,elbow_joint=0.0,wrist_1_joint=-1.57,wrist_2_joint=0.0,wrist_3_joint=0.0)}"
       use_tool_communication="false"
@@ -55,15 +49,5 @@
     >
       <origin xyz="0 0 0" rpy="0 0 0"/>
     </xacro:ur_robot>
-
-  <xacro:if value="${mode == 'gz'}">
-    <gazebo reference="world"></gazebo>
-    <gazebo>
-      <plugin filename="libign_ros2_control-system.so" name="ign_ros2_control::IgnitionROS2ControlPlugin">
-        <parameters>$(arg controllers)</parameters>
-        <controller_manager_node_name>controller_manager</controller_manager_node_name>
-      </plugin>
-    </gazebo>
-  </xacro:if>
 
 </robot>
