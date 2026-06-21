@@ -6,7 +6,7 @@
 from ament_index_python import get_package_share_directory
 from collections import deque, namedtuple
 import gymnasium as gym
-from description.srv import Gripper
+from skrl_msgs.srv import Gripper
 import numpy as np
 import os
 import random
@@ -35,8 +35,8 @@ class ManipulatorEnv(gym.Env, Node):
         self.initial_d = 0
         self.steps = 0
 
-        self.gripper_client = self.create_client(Gripper, '/get_gripper')
-        self.request = Gripper.Request()
+        self.gripper_client = self.create_client(GetTCP, '/get_tcp')
+        self.request = GetTCP.Request()
     
     def _get_gripper(self):
         self.request.joints = self.joints

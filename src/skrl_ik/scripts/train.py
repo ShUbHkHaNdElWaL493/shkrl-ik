@@ -3,7 +3,7 @@
 #   CS22B1090
 #   Shubh Khandelwal
 
-from definitions import DQNAgent, ManipulatorEnv
+from skrl_ik.scripts.definitions import DQNAgent, ManipulatorEnv
 import numpy as np
 import rclpy
 import time
